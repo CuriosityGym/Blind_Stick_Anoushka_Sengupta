@@ -11,8 +11,7 @@ BlynkTimer timer;
 #include <NewPing.h>
 #define tp_1 3
 #define ep_1 2
-NewPing sonar1(tp_1, ep_1);//right most sensor(pins facing forward)-sensor
-facing towards RHS
+NewPing sonar1(tp_1, ep_1);//right most sensor(pins facing forward)-sensor facing towards RHS
 #define tp_2 5
 #define ep_2 6
 NewPing sonar2(tp_2, ep_2);//second from right-sensor facing front
@@ -24,32 +23,26 @@ NewPing sonar3(tp_3, ep_3);//second from left-sensor facing bottom
 NewPing sonar4(tp_4, ep_4);//last from left-sensor facing LHS
 int threshT = 38;
 int threshold = 600;
-void myTimerEvent()//To check level of surrounding light, and send an alert if its
-too bright
+void myTimerEvent()//To check level of surrounding light, and send an alert if its too bright
 {
- int ldrValue = analogRead(A3);//To check the value read by the light dependent
-sensor
+ int ldrValue = analogRead(A3);//To check the value read by the light dependent sensor
  Blynk.virtualWrite(V1, ldrValue);
- if (ldrValue < threshold)// To check if the reading of the LDR crosses the preset
-light 
+ if (ldrValue < threshold)// To check if the reading of the LDR crosses the preset light 
  {
- Blynk.virtualWrite(V3, "https://maker.ifttt.com/trigger/low_light/with/key/nJkXnH5KQoONpOOiYFMWGQERL5BrReqmNGZPM0og86");//Trigger for email
+ Blynk.virtualWrite(V3, "https://maker.ifttt.com/trigger/insert_your_Iftt_event_name/with/key/insert_your_auth_token_here");//Trigger for email
  }
 }
-void myTimerEvent1() //To check the temperature of the surroundings, and send
-an alert if its too bright
+void myTimerEvent1() //To check the temperature of the surroundings, and send an alert if its too bright
 {
  int valT = analogRead(A0);//To store the value read by the sensor on the stick
  int temp = valT * 0.488;//To convert the raw temperature value to degrees
  Blynk.virtualWrite(V6, temp);
- if (temp > threshT) //To check if the temperature crosses the threshold that is
-preset
+ if (temp > threshT) //To check if the temperature crosses the threshold that is preset
  {
- Blynk.virtualWrite(V7, "https://maker.ifttt.com/trigger/HighTemp/with/key/nJkXnH5KQoONpOOiYFMWGQERL5BrReqmNGZPM0og86");//Trigger for email
+ Blynk.virtualWrite(V7, "https://maker.ifttt.com/trigger/insert_your_Iftt_event_name/with/key/insert_your_auth_token_here");//Trigger for email
  }
 }
-BLYNK_WRITE(V8) //Sounds alarm on stick if a button on an app is pressed, to
-help locate the stick within the limits of the house
+BLYNK_WRITE(V8) //Sounds alarm on stick if a button on an app is pressed, to help locate the stick within the limits of the house
 {
  int lx = param.asInt();// To read and store the condition of the button on the app
  if (lx == 1)
@@ -110,8 +103,7 @@ float val1=sonar1.ping_cm();
  Serial.print("Distance4=");
  Serial.print(val4);
  Serial.println(); 
-//Next sequence of code is to issue warnings as per detected distance from
-obstacles
+//Next sequence of code is to issue warnings as per detected distance from obstacles
  if(val1>=25&&val1<=50||val2>=50&&val2<=75)
  {
  digitalWrite(A1,HIGH);
@@ -137,10 +129,12 @@ obstacles
  {
  digitalWrite(A1,LOW);
  }
- if(val4>=52&&val4<=50||val3>=25&&val3<=50)
+ if(val4>=52&&val4<=50||val3>=25&&val3<=50){
  digitalWrite(A5,HIGH);
  delay(20);
  digitalWrite(A5,LOW);
+ }
+ else
  {
  digitalWrite(A5,HIGH);
  delay(5);
@@ -148,15 +142,17 @@ obstacles
  delay(5);
 
  }
- else if(val4<10||val3<10)
+ if(val4<10||val3<10)
  {
  digitalWrite(A5,HIGH);
+ delay(20);
  }
  else
  { 
  digitalWrite(A5,LOW);
- } delay(20);
+  
+ } 
+delay(20);
 
 
  }
-}
